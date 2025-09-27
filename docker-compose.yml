@@ -9,6 +9,18 @@
 # =========================================
 
 services:
+  # ------------------------------
+  # Protect connection to guacamole by HTTPS using nginx. 
+  # ------------------------------
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 443:443     
+    volumes:
+      - ./pki:/pki
+      - ./nginx.conf:/etc/nginx/nginx.conf
 
   # ------------------------------
   # 資料庫服務 (MariaDB)
@@ -45,9 +57,9 @@ services:
     image: guacamole/guacamole:latest      # Guacamole Web 前端
     container_name: guacamole
     restart: unless-stopped
-    ports:
+    #ports:
       # - 8080:8080                       # 對外提供服務的Port : Guacamole Web Port 代表 http://<host>:8080
-      - 80:8080                           # 對外提供服務的Port : Guacamole Web Port 代表 http://<host>
+      #- 80:8080                           # 對外提供服務的Port : Guacamole Web Port 代表 http://<host>
     environment:
       WEBAPP_CONTEXT: "ROOT" 
       # 與 guacd / DB 連線設定
